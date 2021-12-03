@@ -9,7 +9,7 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
-void setItemsPosition()
+void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 {
     Ball->Top = (Form1->ClientHeight) / 2 - (Ball->Height) / 2;
     Ball->Left = (Form1->ClientWidth) / 2 - (Ball->Width) / 2;
@@ -32,6 +32,50 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
-    setItemsPosition();
+    setItemsPosition(Ball,RightPaddle, LeftPaddle);
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::LeftPaddleUpTimer(TObject *Sender)
+{
+    if (LeftPaddle->Top >= 5) LeftPaddle->Top -= 10;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::LeftPaddleDownTimer(TObject *Sender)
+{
+    if (LeftPaddle->Top <= Form1->ClientHeight - 105) LeftPaddle->Top += 10;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::RightPaddleUpTimer(TObject *Sender)
+{
+    if (RightPaddle->Top >= 5) RightPaddle->Top -= 10;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::RightPaddleDownTimer(TObject *Sender)
+{
+    if (RightPaddle->Top <= Form1->ClientHeight - 105) RightPaddle->Top += 10;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_UP) RightPaddleUp->Enabled = true;
+    if (Key == VK_DOWN) RightPaddleDown->Enabled = true;
+    if (Key == 87) LeftPaddleUp->Enabled = true;
+    if (Key == 83) LeftPaddleDown->Enabled = true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_UP) RightPaddleUp->Enabled = false;
+    if (Key == VK_DOWN) RightPaddleDown->Enabled = false;
+    if (Key == 87) LeftPaddleUp->Enabled = false;
+    if (Key == 83) LeftPaddleDown->Enabled = false;
+}
+//---------------------------------------------------------------------------
+
