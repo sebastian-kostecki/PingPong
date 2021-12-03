@@ -14,6 +14,8 @@ class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
     TImage *Ball;
+    TImage *LeftPaddle;
+    TImage *RightPaddle;
     void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
