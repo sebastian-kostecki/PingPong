@@ -35,3 +35,47 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     setItemsPosition(Ball,RightPaddle, LeftPaddle);
 }
 //---------------------------------------------------------------------------
+void __fastcall TForm1::LeftPaddleUpTimer(TObject *Sender)
+{
+    LeftPaddle->Top -= 10;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::LeftPaddleDownTimer(TObject *Sender)
+{
+    LeftPaddle->Top += 10;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::RightPaddleUpTimer(TObject *Sender)
+{
+    RightPaddle->Top -= 10;    
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::RightPaddleDownTimer(TObject *Sender)
+{
+    RightPaddle->Top += 10;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_UP) RightPaddleUp->Enabled = true;
+    if (Key == VK_DOWN) RightPaddleDown->Enabled = true;
+    if (Key == 87) LeftPaddleUp->Enabled = true;
+    if (Key == 83) LeftPaddleDown->Enabled = true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_UP) RightPaddleUp->Enabled = false;
+    if (Key == VK_DOWN) RightPaddleDown->Enabled = false;
+    if (Key == 87) LeftPaddleUp->Enabled = false;
+    if (Key == 83) LeftPaddleDown->Enabled = false;
+}
+//---------------------------------------------------------------------------
+
