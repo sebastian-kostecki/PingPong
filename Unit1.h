@@ -16,6 +16,10 @@ __published:	// IDE-managed Components
     TImage *Ball;
     TImage *LeftPaddle;
     TImage *RightPaddle;
+    TTimer *LeftPaddleUp;
+    TTimer *LeftPaddleDown;
+    TTimer *RightPaddleUp;
+    TTimer *RightPaddleDown;
     void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
