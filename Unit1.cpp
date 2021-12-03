@@ -9,6 +9,9 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
+int translationUp = -8;
+int translationLeft = -8;
+
 void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 {
     Ball->Top = (Form1->ClientHeight) / 2 - (Ball->Height) / 2;
@@ -76,6 +79,33 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
     if (Key == VK_DOWN) RightPaddleDown->Enabled = false;
     if (Key == 87) LeftPaddleUp->Enabled = false;
     if (Key == 83) LeftPaddleDown->Enabled = false;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::MovingBallTimer(TObject *Sender)
+{
+    Ball->Top += translationUp;
+    Ball->Left += translationLeft;
+
+    if (Ball->Top <= 5) translationUp = -translationUp;
+    if (Ball->Top + 32 >= Form1->ClientHeight - 5) translationUp = -translationUp;
+
+    //odbicie od prawej paletki
+    if ((Ball->Top + 16 >= LeftPaddle->Top) &&
+        (Ball->Left == LeftPaddle->Left + 20) &&
+        (Ball->Top +16 <= LeftPaddle->Top + 100))
+        {
+            translationLeft = -translationLeft;
+        }
+
+    //odbicie od lewej paletki
+    if ((Ball->Top + 16 >= RightPaddle->Top) &&
+        (Ball->Top + 16 <= RightPaddle->Top + 100) &&
+        (Ball->Left + 32 == RightPaddle->Left))
+        {
+            translationLeft = -translationLeft;
+        }
 }
 //---------------------------------------------------------------------------
 
