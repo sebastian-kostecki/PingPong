@@ -37,25 +37,25 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::LeftPaddleUpTimer(TObject *Sender)
 {
-    LeftPaddle->Top -= 10;
+    if (LeftPaddle->Top >= 5) LeftPaddle->Top -= 10;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::LeftPaddleDownTimer(TObject *Sender)
 {
-    LeftPaddle->Top += 10;
+    if (LeftPaddle->Top <= Form1->ClientHeight - 105) LeftPaddle->Top += 10;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::RightPaddleUpTimer(TObject *Sender)
 {
-    RightPaddle->Top -= 10;    
+    if (RightPaddle->Top >= 5) RightPaddle->Top -= 10;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::RightPaddleDownTimer(TObject *Sender)
 {
-    RightPaddle->Top += 10;
+    if (RightPaddle->Top <= Form1->ClientHeight - 105) RightPaddle->Top += 10;
 }
 //---------------------------------------------------------------------------
 
