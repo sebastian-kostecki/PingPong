@@ -19,7 +19,13 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
-    Ball->Top = (Form1->ClientHeight) / 2;
-    Ball->Left = (Form1->ClientWidth) / 2;
+    Ball->Top = (Form1->ClientHeight) / 2 - (Ball->Height) / 2;
+    Ball->Left = (Form1->ClientWidth) / 2 - (Ball->Width) / 2;
+
+    LeftPaddle->Top = (Form1->ClientHeight) / 2 - (LeftPaddle->Height) / 2;
+    LeftPaddle->Left = 20;
+
+    LeftPaddle->Top = (Form1->ClientHeight) / 2 - (RightPaddle->Height) / 2;
+    LeftPaddle->Left = Form1->ClientHeight - 20;
 }
 //---------------------------------------------------------------------------
