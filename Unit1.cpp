@@ -117,6 +117,13 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
     bounceBallByWalls(Ball);
     bounceBallByLeftPaddle(Ball, LeftPaddle);
     bounceBallByRightPaddle(Ball, RightPaddle);
+
+    if ((Ball->Left + Ball->Width < LeftPaddle->Left) ||
+        (Ball->Left > RightPaddle->Left + RightPaddle->Width))
+        {
+            MovingBall->Enabled = false;
+            Ball->Visible = false;
+        }
 }
 //---------------------------------------------------------------------------
 
