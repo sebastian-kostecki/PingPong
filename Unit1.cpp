@@ -9,7 +9,7 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
-int translationUp = -8;
+int translationUp = -4;
 int translationLeft = -8;
 
 void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
@@ -24,6 +24,28 @@ void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
     RightPaddle->Left = Form1->ClientWidth - 40;
 }
 
+void speedBallUpIfBounceMiddlePaddle(TImage *Ball, TImage *Paddle)
+{
+    if ((Ball->Top + (Ball->Height / 2) > Paddle->Top + 40) &&
+        (Ball->Top + (Ball->Height / 2) < Paddle->Top + 60) &&
+        (translationUp > 4 || translationUp < -4)) {}
+
+    else if ((Ball->Top + (Ball->Height / 2) > Paddle->Top + 40) &&
+        (Ball->Top + (Ball->Height / 2) < Paddle->Top + 60))
+        {
+            translationUp *= 2;
+            translationLeft *= 2;
+        }
+    else
+        {
+            if (translationUp > 4 || translationUp < -4)
+            {
+                translationUp /= 2;
+                translationLeft /= 2;
+            }
+        }
+}
+
 void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
 {
     if ((Ball->Top + (Ball->Height / 2) > RightPaddle->Top) &&
@@ -31,6 +53,7 @@ void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
         (Ball->Left + Ball->Height == RightPaddle->Left))
         {
             translationLeft = -translationLeft;
+            speedBallUpIfBounceMiddlePaddle(Ball, RightPaddle);
         }
 }
 
@@ -41,6 +64,7 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
         (Ball->Top + (Ball->Height / 2) < LeftPaddle->Top + LeftPaddle->Height))
         {
             translationLeft = -translationLeft;
+            speedBallUpIfBounceMiddlePaddle(Ball, LeftPaddle);
         }
 }
 
