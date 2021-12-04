@@ -24,6 +24,32 @@ void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
     RightPaddle->Left = Form1->ClientWidth - 40;
 }
 
+void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
+{
+    if ((Ball->Top + (Ball->Height / 2) > RightPaddle->Top) &&
+        (Ball->Top + (Ball->Height / 2) < RightPaddle->Top + RightPaddle->Height) &&
+        (Ball->Left + Ball->Height == RightPaddle->Left))
+        {
+            translationLeft = -translationLeft;
+        }
+}
+
+void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
+{
+    if ((Ball->Top + (Ball->Height / 2) > LeftPaddle->Top) &&
+        (Ball->Left == LeftPaddle->Left + LeftPaddle->Width) &&
+        (Ball->Top + (Ball->Height / 2) < LeftPaddle->Top + LeftPaddle->Height))
+        {
+            translationLeft = -translationLeft;
+        }
+}
+
+void bounceBallByWalls(TImage *Ball)
+{
+    if (Ball->Top <= 5) translationUp = -translationUp;
+    if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
+}
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
@@ -88,24 +114,9 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
     Ball->Top += translationUp;
     Ball->Left += translationLeft;
 
-    if (Ball->Top <= 5) translationUp = -translationUp;
-    if (Ball->Top + 32 >= Form1->ClientHeight - 5) translationUp = -translationUp;
-
-    //odbicie od prawej paletki
-    if ((Ball->Top + 16 >= LeftPaddle->Top) &&
-        (Ball->Left == LeftPaddle->Left + 20) &&
-        (Ball->Top +16 <= LeftPaddle->Top + 100))
-        {
-            translationLeft = -translationLeft;
-        }
-
-    //odbicie od lewej paletki
-    if ((Ball->Top + 16 >= RightPaddle->Top) &&
-        (Ball->Top + 16 <= RightPaddle->Top + 100) &&
-        (Ball->Left + 32 == RightPaddle->Left))
-        {
-            translationLeft = -translationLeft;
-        }
+    bounceBallByWalls(Ball);
+    bounceBallByLeftPaddle(Ball, LeftPaddle);
+    bounceBallByRightPaddle(Ball, RightPaddle);
 }
 //---------------------------------------------------------------------------
 
