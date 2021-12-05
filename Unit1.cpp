@@ -9,6 +9,9 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
+int translationUp = -4;
+int translationLeft = -8;
+
 void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 {
     Ball->Top = (Form1->ClientHeight) / 2 - (Ball->Height) / 2;
@@ -19,6 +22,73 @@ void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 
     RightPaddle->Top = (Form1->ClientHeight) / 2 - (RightPaddle->Height) / 2;
     RightPaddle->Left = Form1->ClientWidth - 40;
+}
+
+bool isBounceInMiddleOfPaddle(TImage *Ball, TImage *Paddle)
+{
+    if ((Ball->Top + (Ball->Height / 2) > Paddle->Top + 40) &&
+        (Ball->Top + (Ball->Height / 2) < Paddle->Top + 60))
+        {
+            return true;
+        }
+    return false;
+}
+
+bool isTranslationOverNormal()
+{
+    const int NORMAL_TRANSLATION_DOWN = -4;
+    const int NORMAL_TRANSLATION_UP = 4;
+
+    if (translationUp > NORMAL_TRANSLATION_UP ||
+        translationUp < NORMAL_TRANSLATION_DOWN)
+    {
+        return true;
+    }
+    return false;
+}
+
+void speedBallUpIfBounceMiddlePaddle(TImage *Ball, TImage *Paddle)
+{
+    if (isBounceInMiddleOfPaddle(Ball, Paddle) && isTranslationOverNormal()) {}
+
+    else if (isBounceInMiddleOfPaddle(Ball, Paddle))
+        {
+            translationUp *= 2;
+            translationLeft *= 2;
+        }
+    else if (isTranslationOverNormal())
+        {
+            translationUp /= 2;
+            translationLeft /= 2;
+        }
+}
+
+void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
+{
+    if ((Ball->Top + (Ball->Height / 2) > RightPaddle->Top) &&
+        (Ball->Top + (Ball->Height / 2) < RightPaddle->Top + RightPaddle->Height) &&
+        (Ball->Left + Ball->Height == RightPaddle->Left))
+        {
+            translationLeft = -translationLeft;
+            speedBallUpIfBounceMiddlePaddle(Ball, RightPaddle);
+        }
+}
+
+void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
+{
+    if ((Ball->Top + (Ball->Height / 2) > LeftPaddle->Top) &&
+        (Ball->Left == LeftPaddle->Left + LeftPaddle->Width) &&
+        (Ball->Top + (Ball->Height / 2) < LeftPaddle->Top + LeftPaddle->Height))
+        {
+            translationLeft = -translationLeft;
+            speedBallUpIfBounceMiddlePaddle(Ball, LeftPaddle);
+        }
+}
+
+void bounceBallByWalls(TImage *Ball)
+{
+    if (Ball->Top <= 5) translationUp = -translationUp;
+    if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
 }
 
 //---------------------------------------------------------------------------
@@ -76,6 +146,25 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
     if (Key == VK_DOWN) RightPaddleDown->Enabled = false;
     if (Key == 87) LeftPaddleUp->Enabled = false;
     if (Key == 83) LeftPaddleDown->Enabled = false;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::MovingBallTimer(TObject *Sender)
+{
+    Ball->Top += translationUp;
+    Ball->Left += translationLeft;
+
+    bounceBallByWalls(Ball);
+    bounceBallByLeftPaddle(Ball, LeftPaddle);
+    bounceBallByRightPaddle(Ball, RightPaddle);
+
+    if ((Ball->Left + Ball->Width < LeftPaddle->Left) ||
+        (Ball->Left > RightPaddle->Left + RightPaddle->Width))
+        {
+            MovingBall->Enabled = false;
+            Ball->Visible = false;
+        }
 }
 //---------------------------------------------------------------------------
 
