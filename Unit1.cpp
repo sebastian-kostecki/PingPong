@@ -12,6 +12,9 @@ TForm1 *Form1;
 int translationUp = -4;
 int translationLeft = -8;
 
+int scoreLeftPaddle = 0;
+int scoreRightPaddle = 0;
+
 void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 {
     Ball->Top = (Form1->ClientHeight) / 2 - (Ball->Height) / 2;
@@ -105,8 +108,16 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
     setItemsPosition(Ball,RightPaddle, LeftPaddle);
     Title->Top = 50;
     Title->Left = Form1->ClientWidth / 2 - Title->Width / 2;
-    ButtonNewGame->Top = Form1->ClientHeight - ButtonNewGame->Height - 100;
+    ButtonNewGame->Top = Form1->ClientHeight - ButtonNewGame->Height - 50;
     ButtonNewGame->Left = Form1->ClientWidth / 2 - ButtonNewGame->Width / 2;
+    WinnerInformation->Top = 50;
+    WinnerInformation->Left = Form1->ClientWidth / 2 - WinnerInformation->Width / 2;
+    Score->Top = WinnerInformation->Top + WinnerInformation->Height + 20;
+    Score->Left = Form1->ClientWidth / 2 - Score->Width / 2;
+    CounterBounces->Top = Score->Top + Score->Height + 20;
+    CounterBounces->Left = Form1->ClientWidth / 2 - CounterBounces->Width / 2;
+    NextRound->Top = CounterBounces->Top + CounterBounces->Height + 20;
+    NextRound->Left = Form1->ClientWidth / 2 - NextRound->Width /2;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::LeftPaddleUpTimer(TObject *Sender)
@@ -168,6 +179,14 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
         {
             MovingBall->Enabled = false;
             Ball->Visible = false;
+
+            WinnerInformation->Visible = true;
+            Score->Visible = true;
+            //trzeba dodac liczenie punktow
+            CounterBounces->Visible = true;
+            //trzeba dodac zliczanie odbic
+            NextRound->Visible = true;
+            ButtonNewGame->Visible = true;
         }
 }
 //---------------------------------------------------------------------------
@@ -181,4 +200,9 @@ void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
     ButtonNewGame->Visible = false;    
 }
 //---------------------------------------------------------------------------
+
+
+
+
+
 
