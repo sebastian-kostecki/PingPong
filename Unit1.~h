@@ -21,6 +21,8 @@ __published:	// IDE-managed Components
     TTimer *RightPaddleUp;
     TTimer *RightPaddleDown;
     TTimer *MovingBall;
+    TLabel *Title;
+    TButton *ButtonNewGame;
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall LeftPaddleUpTimer(TObject *Sender);
     void __fastcall LeftPaddleDownTimer(TObject *Sender);

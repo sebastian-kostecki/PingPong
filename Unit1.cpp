@@ -103,6 +103,10 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
     setItemsPosition(Ball,RightPaddle, LeftPaddle);
+    Title->Top = 50;
+    Title->Left = Form1->ClientWidth / 2 - Title->Width / 2;
+    ButtonNewGame->Top = Form1->ClientHeight - ButtonNewGame->Height - 100;
+    ButtonNewGame->Left = Form1->ClientWidth / 2 - ButtonNewGame->Width / 2;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::LeftPaddleUpTimer(TObject *Sender)
@@ -165,6 +169,16 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
             MovingBall->Enabled = false;
             Ball->Visible = false;
         }
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
+{
+    MovingBall->Enabled = true;
+    Title->Visible = false;
+    ButtonNewGame->Visible = false;    
 }
 //---------------------------------------------------------------------------
 
