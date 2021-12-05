@@ -14,6 +14,8 @@ int translationLeft = -8;
 
 int scoreLeftPaddle = 0;
 int scoreRightPaddle = 0;
+int numberOfBounces = 0;
+AnsiString bounces = "";
 
 void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 {
@@ -74,6 +76,7 @@ void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
         {
             translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, RightPaddle);
+            numberOfBounces++;
         }
 }
 
@@ -85,6 +88,7 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
         {
             translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, LeftPaddle);
+            numberOfBounces++;
         }
 }
 
@@ -184,6 +188,9 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
             Score->Visible = true;
             //trzeba dodac liczenie punktow
             CounterBounces->Visible = true;
+
+            bounces = IntToStr(numberOfBounces);
+            CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
             //trzeba dodac zliczanie odbic
             NextRound->Visible = true;
             ButtonNewGame->Visible = true;
