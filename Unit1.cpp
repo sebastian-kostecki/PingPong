@@ -24,25 +24,42 @@ void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
     RightPaddle->Left = Form1->ClientWidth - 40;
 }
 
-void speedBallUpIfBounceMiddlePaddle(TImage *Ball, TImage *Paddle)
+bool isBounceInMiddleOfPaddle(TImage *Ball, TImage *Paddle)
 {
     if ((Ball->Top + (Ball->Height / 2) > Paddle->Top + 40) &&
-        (Ball->Top + (Ball->Height / 2) < Paddle->Top + 60) &&
-        (translationUp > 4 || translationUp < -4)) {}
-
-    else if ((Ball->Top + (Ball->Height / 2) > Paddle->Top + 40) &&
         (Ball->Top + (Ball->Height / 2) < Paddle->Top + 60))
+        {
+            return true;
+        }
+    return false;
+}
+
+bool isTranslationOverNormal()
+{
+    const int NORMAL_TRANSLATION_DOWN = -4;
+    const int NORMAL_TRANSLATION_UP = 4;
+
+    if (translationUp > NORMAL_TRANSLATION_UP ||
+        translationUp < NORMAL_TRANSLATION_DOWN)
+    {
+        return true;
+    }
+    return false;
+}
+
+void speedBallUpIfBounceMiddlePaddle(TImage *Ball, TImage *Paddle)
+{
+    if (isBounceInMiddleOfPaddle(Ball, Paddle) && isTranslationOverNormal()) {}
+
+    else if (isBounceInMiddleOfPaddle(Ball, Paddle))
         {
             translationUp *= 2;
             translationLeft *= 2;
         }
-    else
+    else if (isTranslationOverNormal())
         {
-            if (translationUp > 4 || translationUp < -4)
-            {
-                translationUp /= 2;
-                translationLeft /= 2;
-            }
+            translationUp /= 2;
+            translationLeft /= 2;
         }
 }
 
