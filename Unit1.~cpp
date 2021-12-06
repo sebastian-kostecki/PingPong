@@ -101,6 +101,28 @@ void bounceBallByWalls(TImage *Ball)
     if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
 }
 
+void displayInformationsAfterWin(TLabel *WinnerInformation, TLabel *Score, TLabel *CounterBounces, TButton *NextRound, TButton *ButtonNewGame)
+{
+    WinnerInformation->Visible = true;
+    Score->Visible = true;
+    scoreLeftPlayer = IntToStr(scoreLeftPaddle);
+    scoreRightPlayer = IntToStr(scoreRightPaddle);
+    Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
+
+    CounterBounces->Visible = true;
+    bounces = IntToStr(numberOfBounces);
+    CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
+
+    NextRound->Visible = true;
+    ButtonNewGame->Visible = true;
+}
+
+void disableBall(TImage *Ball, TTimer *MovingBall)
+{
+    MovingBall->Enabled = false;
+    Ball->Visible = false;
+}
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
@@ -186,50 +208,16 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
         WinnerInformation->Caption = "Punkt dla gracza prawego >";
         scoreRightPaddle++;
 
-
-        MovingBall->Enabled = false;
-        Ball->Visible = false;
-
-        WinnerInformation->Visible = true;
-        Score->Visible = true;
-        scoreLeftPlayer = IntToStr(scoreLeftPaddle);
-        scoreRightPlayer = IntToStr(scoreRightPaddle);
-        Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
-
-
-        CounterBounces->Visible = true;
-        bounces = IntToStr(numberOfBounces);
-        CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
-
-        NextRound->Visible = true;
-        ButtonNewGame->Visible = true;
-
-
-
-
+        disableBall(Ball, MovingBall);
+        displayInformationsAfterWin(WinnerInformation, Score, CounterBounces, NextRound, ButtonNewGame);
     }
     else if (Ball->Left > RightPaddle->Left + RightPaddle->Width)
     {
         WinnerInformation->Caption = "< Punkt dla gracza lewego";
         scoreLeftPaddle++;
 
-        MovingBall->Enabled = false;
-        Ball->Visible = false;
-
-        WinnerInformation->Visible = true;
-        Score->Visible = true;
-        scoreLeftPlayer = IntToStr(scoreLeftPaddle);
-        scoreRightPlayer = IntToStr(scoreRightPaddle);
-        Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
-
-
-        CounterBounces->Visible = true;
-        bounces = IntToStr(numberOfBounces);
-        CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
-
-
-        NextRound->Visible = true;
-        ButtonNewGame->Visible = true;
+        disableBall(Ball, MovingBall);
+        displayInformationsAfterWin(WinnerInformation, Score, CounterBounces, NextRound, ButtonNewGame);
     }
 }
 //---------------------------------------------------------------------------
