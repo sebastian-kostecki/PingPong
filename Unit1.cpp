@@ -9,8 +9,16 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
-int translationUp = -4;
+int translationUp = -5;
 int translationLeft = -8;
+
+int scoreLeftPaddle = 0;
+int scoreRightPaddle = 0;
+AnsiString scoreLeftPlayer = "";
+AnsiString scoreRightPlayer = "";
+
+int numberOfBounces = 0;
+AnsiString bounces = "";
 
 void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 {
@@ -36,8 +44,8 @@ bool isBounceInMiddleOfPaddle(TImage *Ball, TImage *Paddle)
 
 bool isTranslationOverNormal()
 {
-    const int NORMAL_TRANSLATION_DOWN = -4;
-    const int NORMAL_TRANSLATION_UP = 4;
+    const int NORMAL_TRANSLATION_DOWN = -5;
+    const int NORMAL_TRANSLATION_UP = 5;
 
     if (translationUp > NORMAL_TRANSLATION_UP ||
         translationUp < NORMAL_TRANSLATION_DOWN)
@@ -71,6 +79,7 @@ void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
         {
             translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, RightPaddle);
+            numberOfBounces++;
         }
 }
 
@@ -82,6 +91,7 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
         {
             translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, LeftPaddle);
+            numberOfBounces++;
         }
 }
 
@@ -89,6 +99,28 @@ void bounceBallByWalls(TImage *Ball)
 {
     if (Ball->Top <= 5) translationUp = -translationUp;
     if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
+}
+
+void displayInformationsAfterWin(TLabel *WinnerInformation, TLabel *Score, TLabel *CounterBounces, TButton *NextRound, TButton *ButtonNewGame)
+{
+    WinnerInformation->Visible = true;
+    Score->Visible = true;
+    scoreLeftPlayer = IntToStr(scoreLeftPaddle);
+    scoreRightPlayer = IntToStr(scoreRightPaddle);
+    Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
+
+    CounterBounces->Visible = true;
+    bounces = IntToStr(numberOfBounces);
+    CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
+
+    NextRound->Visible = true;
+    ButtonNewGame->Visible = true;
+}
+
+void disableBall(TImage *Ball, TTimer *MovingBall)
+{
+    MovingBall->Enabled = false;
+    Ball->Visible = false;
 }
 
 //---------------------------------------------------------------------------
@@ -103,6 +135,18 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
     setItemsPosition(Ball,RightPaddle, LeftPaddle);
+    Title->Top = 50;
+    Title->Left = Form1->ClientWidth / 2 - Title->Width / 2;
+    WinnerInformation->Top = 50;
+    WinnerInformation->Left = Form1->ClientWidth / 2 - WinnerInformation->Width / 2;
+    Score->Top = WinnerInformation->Top + WinnerInformation->Height + 20;
+    Score->Left = Form1->ClientWidth / 2 - Score->Width / 2;
+    CounterBounces->Top = Score->Top + Score->Height + 20;
+    CounterBounces->Left = Form1->ClientWidth / 2 - CounterBounces->Width / 2;
+    NextRound->Top = CounterBounces->Top + CounterBounces->Height + 20;
+    NextRound->Left = Form1->ClientWidth / 2 - NextRound->Width /2;
+    ButtonNewGame->Top = NextRound->Top + NextRound->Height + 20;
+    ButtonNewGame->Left = Form1->ClientWidth / 2 - ButtonNewGame->Width / 2;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::LeftPaddleUpTimer(TObject *Sender)
@@ -159,12 +203,55 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
     bounceBallByLeftPaddle(Ball, LeftPaddle);
     bounceBallByRightPaddle(Ball, RightPaddle);
 
-    if ((Ball->Left + Ball->Width < LeftPaddle->Left) ||
-        (Ball->Left > RightPaddle->Left + RightPaddle->Width))
-        {
-            MovingBall->Enabled = false;
-            Ball->Visible = false;
-        }
+    if (Ball->Left + Ball->Width < LeftPaddle->Left)
+    {
+        WinnerInformation->Caption = "Punkt dla gracza prawego >";
+        scoreRightPaddle++;
+
+        disableBall(Ball, MovingBall);
+        displayInformationsAfterWin(WinnerInformation, Score, CounterBounces, NextRound, ButtonNewGame);
+    }
+    else if (Ball->Left > RightPaddle->Left + RightPaddle->Width)
+    {
+        WinnerInformation->Caption = "< Punkt dla gracza lewego";
+        scoreLeftPaddle++;
+
+        disableBall(Ball, MovingBall);
+        displayInformationsAfterWin(WinnerInformation, Score, CounterBounces, NextRound, ButtonNewGame);
+    }
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
+{
+    NextRoundClick(NextRound);
+
+    scoreLeftPaddle = 0;
+    scoreRightPaddle = 0;
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TForm1::NextRoundClick(TObject *Sender)
+{
+    FormCreate(Form1);
+    WinnerInformation->Visible = false;
+    Score->Visible = false;
+    CounterBounces->Visible = false;
+    NextRound->Visible = false;
+    ButtonNewGame->Visible = false;
+    Title->Visible = false;
+    Ball->Visible = true;
+    numberOfBounces = 0;
+    MovingBall->Enabled = true;
+    if (isTranslationOverNormal())
+    {
+        translationUp /= 2;
+        translationLeft /= 2;
+    }
 }
 //---------------------------------------------------------------------------
 
