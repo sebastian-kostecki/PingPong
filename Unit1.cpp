@@ -238,25 +238,10 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
 
 void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
 {
-    TForm1:FormCreate(Form1);
+    NextRoundClick(NextRound);
 
-    MovingBall->Enabled = true;
-    Ball->Visible = true;
-    Title->Visible = false;
-    ButtonNewGame->Visible = false;
-    WinnerInformation->Visible = false;
-    Score->Visible = false;
-    CounterBounces->Visible = false;
-    numberOfBounces = 0;
-    NextRound->Visible = false;
     scoreLeftPaddle = 0;
     scoreRightPaddle = 0;
-
-    if (isTranslationOverNormal())
-    {
-        translationUp /= 2;
-        translationLeft /= 2;
-    }
 }
 //---------------------------------------------------------------------------
 
@@ -264,18 +249,16 @@ void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
 
 void __fastcall TForm1::NextRoundClick(TObject *Sender)
 {
-    TForm1:FormCreate(Form1);
-
+    FormCreate(Form1);
     WinnerInformation->Visible = false;
     Score->Visible = false;
     CounterBounces->Visible = false;
-    numberOfBounces = 0;
     NextRound->Visible = false;
     ButtonNewGame->Visible = false;
-
-    MovingBall->Enabled = true;
+    Title->Visible = false;
     Ball->Visible = true;
-
+    numberOfBounces = 0;
+    MovingBall->Enabled = true;
     if (isTranslationOverNormal())
     {
         translationUp /= 2;
