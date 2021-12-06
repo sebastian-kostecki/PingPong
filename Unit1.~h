@@ -38,6 +38,7 @@ __published:	// IDE-managed Components
           TShiftState Shift);
     void __fastcall MovingBallTimer(TObject *Sender);
     void __fastcall ButtonNewGameClick(TObject *Sender);
+    void __fastcall NextRoundClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
