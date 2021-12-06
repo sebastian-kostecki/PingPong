@@ -14,6 +14,9 @@ int translationLeft = -8;
 
 int scoreLeftPaddle = 0;
 int scoreRightPaddle = 0;
+AnsiString scoreLeftPlayer = "";
+AnsiString scoreRightPlayer = "";
+
 int numberOfBounces = 0;
 AnsiString bounces = "";
 
@@ -178,23 +181,57 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
     bounceBallByLeftPaddle(Ball, LeftPaddle);
     bounceBallByRightPaddle(Ball, RightPaddle);
 
-    if ((Ball->Left + Ball->Width < LeftPaddle->Left) ||
-        (Ball->Left > RightPaddle->Left + RightPaddle->Width))
-        {
-            MovingBall->Enabled = false;
-            Ball->Visible = false;
+    if (Ball->Left + Ball->Width < LeftPaddle->Left)
+    {
+        MovingBall->Enabled = false;
+        Ball->Visible = false;
 
-            WinnerInformation->Visible = true;
-            Score->Visible = true;
-            //trzeba dodac liczenie punktow
-            CounterBounces->Visible = true;
+        scoreRightPaddle++;
 
-            bounces = IntToStr(numberOfBounces);
-            CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
-            //trzeba dodac zliczanie odbic
-            NextRound->Visible = true;
-            ButtonNewGame->Visible = true;
-        }
+        WinnerInformation->Visible = true;
+        Score->Visible = true;
+        scoreLeftPlayer = IntToStr(scoreLeftPaddle);
+        scoreRightPlayer = IntToStr(scoreRightPaddle);
+        Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
+
+
+        CounterBounces->Visible = true;
+        bounces = IntToStr(numberOfBounces);
+        CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
+
+        NextRound->Visible = true;
+        ButtonNewGame->Visible = true;
+
+        WinnerInformation->Caption = "Punkt dla gracza prawego >";
+
+
+    }
+    else if (Ball->Left > RightPaddle->Left + RightPaddle->Width)
+    {
+        MovingBall->Enabled = false;
+        Ball->Visible = false;
+
+        scoreLeftPaddle++;
+
+        WinnerInformation->Visible = true;
+        Score->Visible = true;
+        scoreLeftPlayer = IntToStr(scoreLeftPaddle);
+        scoreRightPlayer = IntToStr(scoreRightPaddle);
+        Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
+
+
+        CounterBounces->Visible = true;
+        bounces = IntToStr(numberOfBounces);
+        CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
+
+
+        NextRound->Visible = true;
+        ButtonNewGame->Visible = true;
+
+
+        WinnerInformation->Caption = "< Punkt dla gracza lewego";
+
+    }
 }
 //---------------------------------------------------------------------------
 
