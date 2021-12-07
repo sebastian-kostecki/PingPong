@@ -210,20 +210,26 @@ void __fastcall TForm1::RightPaddleDownTimer(TObject *Sender)
 void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
+    const int VK_W = 87;
+    const int VK_S = 83;
+
     if (Key == VK_UP) RightPaddleUp->Enabled = true;
     if (Key == VK_DOWN) RightPaddleDown->Enabled = true;
-    if (Key == 87) LeftPaddleUp->Enabled = true;
-    if (Key == 83) LeftPaddleDown->Enabled = true;
+    if (Key == VK_W) LeftPaddleUp->Enabled = true;
+    if (Key == VK_S) LeftPaddleDown->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
+    const int VK_W = 87;
+    const int VK_S = 83;
+
     if (Key == VK_UP) RightPaddleUp->Enabled = false;
     if (Key == VK_DOWN) RightPaddleDown->Enabled = false;
-    if (Key == 87) LeftPaddleUp->Enabled = false;
-    if (Key == 83) LeftPaddleDown->Enabled = false;
+    if (Key == VK_W) LeftPaddleUp->Enabled = false;
+    if (Key == VK_S) LeftPaddleDown->Enabled = false;
 }
 //---------------------------------------------------------------------------
 

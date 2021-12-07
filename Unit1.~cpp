@@ -115,8 +115,8 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
 void bounceBallByWalls(TImage *Ball)
 {
     const int DISTANCE_FROM_WALL = 5;
-    if (Ball->Top <= 5) translationUp = -translationUp;
-    if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
+    if (Ball->Top <= DISTANCE_FROM_WALL) translationUp = -translationUp;
+    if (Ball->Top + Ball->Height >= Form1->ClientHeight - DISTANCE_FROM_WALL) translationUp = -translationUp;
 }
 
 void displayInformationsAfterWin(TLabel *WinnerInformation, TLabel *Score, TLabel *CounterBounces, TButton *NextRound, TButton *ButtonNewGame)
@@ -220,10 +220,13 @@ void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
 void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
+    const int VK_W = 87;
+    const int VK_S = 83;
+
     if (Key == VK_UP) RightPaddleUp->Enabled = false;
     if (Key == VK_DOWN) RightPaddleDown->Enabled = false;
-    if (Key == 87) LeftPaddleUp->Enabled = false;
-    if (Key == 83) LeftPaddleDown->Enabled = false;
+    if (Key == VK_W) LeftPaddleUp->Enabled = false;
+    if (Key == VK_S) LeftPaddleDown->Enabled = false;
 }
 //---------------------------------------------------------------------------
 
