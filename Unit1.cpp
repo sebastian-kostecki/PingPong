@@ -20,6 +20,8 @@ AnsiString scoreRightPlayer = "";
 int numberOfBounces = 0;
 AnsiString bounces = "";
 
+bool firstGame = true;
+
 void setItemsPosition(TImage *Ball, TImage *RightPaddle, TImage *LeftPaddle)
 {
     Ball->Top = (Form1->ClientHeight) / 2 - (Ball->Height) / 2;
@@ -226,8 +228,15 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
 
 void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
 {
+    if (firstGame == true)
+    {
+        firstGame = false;
+    }
+    else if (firstGame == false && (Application->MessageBox("Czy na pewno chcesz zaczaæ od nowa?", "PotwierdŸ", MB_YESNO | MB_ICONQUESTION) == IDNO))
+    {
+        return;
+    }
     NextRoundClick(NextRound);
-
     scoreLeftPaddle = 0;
     scoreRightPaddle = 0;
 }
