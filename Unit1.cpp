@@ -11,16 +11,11 @@ TForm1 *Form1;
 
 int translationUp = -5;
 int translationLeft = -8;
-
 int baseTranslationLeft = -8;
 
 int scoreLeftPaddle = 0;
 int scoreRightPaddle = 0;
-AnsiString scoreLeftPlayer = "";
-AnsiString scoreRightPlayer = "";
-
 int numberOfBounces = 0;
-AnsiString bounces = "";
 
 bool firstGame = true;
 
@@ -127,12 +122,12 @@ void displayInformationsAfterWin(TLabel *WinnerInformation, TLabel *Score, TLabe
 {
     WinnerInformation->Visible = true;
     Score->Visible = true;
-    scoreLeftPlayer = IntToStr(scoreLeftPaddle);
-    scoreRightPlayer = IntToStr(scoreRightPaddle);
+    AnsiString scoreLeftPlayer = IntToStr(scoreLeftPaddle);
+    AnsiString scoreRightPlayer = IntToStr(scoreRightPaddle);
     Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
 
     CounterBounces->Visible = true;
-    bounces = IntToStr(numberOfBounces);
+    AnsiString bounces = IntToStr(numberOfBounces);
     CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
 
     NextRound->Visible = true;
