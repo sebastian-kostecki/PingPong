@@ -86,8 +86,8 @@ void speedUpBallWithTime()
         if (translationLeft > 0) translationLeft++;
         else translationLeft = translationLeft--;
 
-        if (baseTranslationLeft > 0) baseTranslationLeft = baseTranslationLeft++;
-        else baseTranslationLeft = baseTranslationLeft--;
+        if (baseTranslationLeft > 0) baseTranslationLeft++;
+        else baseTranslationLeft--;
     }
 }
 
@@ -143,6 +143,18 @@ void disableBall(TImage *Ball, TTimer *MovingBall)
 {
     MovingBall->Enabled = false;
     Ball->Visible = false;
+}
+
+void resetTranslations()
+{
+    if (translationUp > 0) translationUp = 5;
+    else translationUp = translationUp = -5;
+
+    if (translationLeft > 0) translationLeft = 8;
+    else translationLeft = translationLeft = -8;
+
+    if (baseTranslationLeft > 0) baseTranslationLeft = 8;
+    else baseTranslationLeft = -8;
 }
 
 //---------------------------------------------------------------------------
@@ -277,11 +289,7 @@ void __fastcall TForm1::NextRoundClick(TObject *Sender)
     Ball->Visible = true;
     numberOfBounces = 0;
     MovingBall->Enabled = true;
-    if (isTranslationOverNormal())
-    {
-        translationUp /= 2;
-        translationLeft /= 2;
-    }
+    resetTranslations();
 }
 //---------------------------------------------------------------------------
 
