@@ -12,6 +12,8 @@ TForm1 *Form1;
 int translationUp = -5;
 int translationLeft = -8;
 
+int baseTranslationLeft = -8;
+
 int scoreLeftPaddle = 0;
 int scoreRightPaddle = 0;
 AnsiString scoreLeftPlayer = "";
@@ -46,11 +48,8 @@ bool isBounceInMiddleOfPaddle(TImage *Ball, TImage *Paddle)
 
 bool isTranslationOverNormal()
 {
-    const int NORMAL_TRANSLATION_DOWN = -5;
-    const int NORMAL_TRANSLATION_UP = 5;
-
-    if (translationUp > NORMAL_TRANSLATION_UP ||
-        translationUp < NORMAL_TRANSLATION_DOWN)
+    if (translationUp > abs(baseTranslationLeft) ||
+        translationUp < -(abs(baseTranslationLeft)))
     {
         return true;
     }
