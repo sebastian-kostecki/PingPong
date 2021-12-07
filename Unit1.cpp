@@ -12,6 +12,8 @@ TForm1 *Form1;
 int translationUp = -5;
 int translationLeft = -8;
 
+int baseTranslationLeft = -8;
+
 int scoreLeftPaddle = 0;
 int scoreRightPaddle = 0;
 AnsiString scoreLeftPlayer = "";
@@ -46,11 +48,8 @@ bool isBounceInMiddleOfPaddle(TImage *Ball, TImage *Paddle)
 
 bool isTranslationOverNormal()
 {
-    const int NORMAL_TRANSLATION_DOWN = -5;
-    const int NORMAL_TRANSLATION_UP = 5;
-
-    if (translationUp > NORMAL_TRANSLATION_UP ||
-        translationUp < NORMAL_TRANSLATION_DOWN)
+    if (translationUp > abs(baseTranslationLeft) ||
+        translationUp < -(abs(baseTranslationLeft)))
     {
         return true;
     }
@@ -76,27 +75,45 @@ void speedBallUpIfBounceMiddlePaddle(TImage *Ball, TImage *Paddle)
     }
 }
 
+void speedUpBallWithTime()
+{
+    const int NUMBER_OF_BOUNCES_TO_SPEED_UP_BALL = 6;
+    if (numberOfBounces % NUMBER_OF_BOUNCES_TO_SPEED_UP_BALL == 5)
+    {
+        if (translationUp > 0) translationUp++;
+        else translationUp = translationUp--;
+
+        if (translationLeft > 0) translationLeft++;
+        else translationLeft = translationLeft--;
+
+        if (baseTranslationLeft > 0) baseTranslationLeft++;
+        else baseTranslationLeft--;
+    }
+}
+
 void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
 {
     if ((Ball->Top + (Ball->Height / 2) > RightPaddle->Top) &&
         (Ball->Top + (Ball->Height / 2) < RightPaddle->Top + RightPaddle->Height) &&
-        (Ball->Left + Ball->Height == RightPaddle->Left))
+        (Ball->Left + Ball->Height > RightPaddle->Left))
         {
-            translationLeft = -translationLeft;
+            if (translationLeft > 0) translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, RightPaddle);
             numberOfBounces++;
+            speedUpBallWithTime();
         }
 }
 
 void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
 {
     if ((Ball->Top + (Ball->Height / 2) > LeftPaddle->Top) &&
-        (Ball->Left == LeftPaddle->Left + LeftPaddle->Width) &&
+        (Ball->Left < LeftPaddle->Left + LeftPaddle->Width) &&
         (Ball->Top + (Ball->Height / 2) < LeftPaddle->Top + LeftPaddle->Height))
         {
-            translationLeft = -translationLeft;
+            if (translationLeft < 0) translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, LeftPaddle);
             numberOfBounces++;
+            speedUpBallWithTime();
         }
 }
 
@@ -128,11 +145,26 @@ void disableBall(TImage *Ball, TTimer *MovingBall)
     Ball->Visible = false;
 }
 
+void resetTranslations()
+{
+    const int BASE_TRANSLATION_UP = 5;
+    const int BASE_TRANSLATION_LEFT = 8;
+
+    if (translationUp > 0) translationUp = BASE_TRANSLATION_UP;
+    else translationUp = translationUp = -BASE_TRANSLATION_UP;
+
+    if (translationLeft > 0) translationLeft = BASE_TRANSLATION_LEFT;
+    else translationLeft = translationLeft = -BASE_TRANSLATION_LEFT;
+
+    if (baseTranslationLeft > 0) baseTranslationLeft = BASE_TRANSLATION_LEFT;
+    else baseTranslationLeft = -BASE_TRANSLATION_LEFT;
+}
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
-    ShowMessage("Witaj w grze PingPong.\n\nLewy gracz steruje wciskaj¹c klawisze W oraz S.\nPrawy gracz steruje wciskaj¹c strza³ki w górê i w dó³.\n\nInformacje dla graczy:\nOdbicie w srodku paletki przyspieszy pi³kê.\nMo¿esz dowolnie zmieniaæ pole gry.\n\nDobrej zabawy!");
+    ShowMessage("Witaj w grze PingPong.\n\nLewy gracz steruje wciskaj¹c klawisze W oraz S.\nPrawy gracz steruje wciskaj¹c strza³ki w górê i w dó³.\n\nInformacje dla graczy:\nOdbicie w srodku paletki przyœpieszy pi³kê.\nPi³ka przyœpiesza w trakcie gry.\nMo¿esz dowolnie zmieniaæ pole gry.\n\nDobrej zabawy!");
 }
 //---------------------------------------------------------------------------
 
@@ -260,12 +292,9 @@ void __fastcall TForm1::NextRoundClick(TObject *Sender)
     Ball->Visible = true;
     numberOfBounces = 0;
     MovingBall->Enabled = true;
-    if (isTranslationOverNormal())
-    {
-        translationUp /= 2;
-        translationLeft /= 2;
-    }
+    resetTranslations();
 }
 //---------------------------------------------------------------------------
+
 
 
