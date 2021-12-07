@@ -114,6 +114,7 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
 
 void bounceBallByWalls(TImage *Ball)
 {
+    const int DISTANCE_FROM_WALL = 5;
     if (Ball->Top <= 5) translationUp = -translationUp;
     if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
 }

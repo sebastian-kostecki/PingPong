@@ -114,8 +114,9 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
 
 void bounceBallByWalls(TImage *Ball)
 {
-    if (Ball->Top <= 5) translationUp = -translationUp;
-    if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
+    const int DISTANCE_FROM_WALL = 5;
+    if (Ball->Top <= DISTANCE_FROM_WALL) translationUp = -translationUp;
+    if (Ball->Top + Ball->Height >= Form1->ClientHeight - DISTANCE_FROM_WALL) translationUp = -translationUp;
 }
 
 void displayInformationsAfterWin(TLabel *WinnerInformation, TLabel *Score, TLabel *CounterBounces, TButton *NextRound, TButton *ButtonNewGame)
