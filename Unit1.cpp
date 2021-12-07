@@ -112,6 +112,18 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
         }
 }
 
+bool isRightPlayerWinner(TImage *Ball, TImage *LeftPaddle)
+{
+    if (Ball->Left + Ball->Width < LeftPaddle->Left) return true;
+    else return false;
+}
+
+bool isLeftPlayerWinner(TImage *Ball, TImage *RightPaddle)
+{
+    if (Ball->Left > RightPaddle->Left + RightPaddle->Width) return true;
+    else return false;
+}
+
 void bounceBallByWalls(TImage *Ball)
 {
     const int DISTANCE_FROM_WALL = 5;
@@ -243,7 +255,7 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
     bounceBallByLeftPaddle(Ball, LeftPaddle);
     bounceBallByRightPaddle(Ball, RightPaddle);
 
-    if (Ball->Left + Ball->Width < LeftPaddle->Left)
+    if (isRightPlayerWinner(Ball, LeftPaddle))
     {
         WinnerInformation->Caption = "Punkt dla gracza prawego >";
         scoreRightPaddle++;
@@ -251,7 +263,7 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
         disableBall(Ball, MovingBall);
         displayInformationsAfterWin(WinnerInformation, Score, CounterBounces, NextRound, ButtonNewGame);
     }
-    else if (Ball->Left > RightPaddle->Left + RightPaddle->Width)
+    else if (isLeftPlayerWinner(Ball, RightPaddle))
     {
         WinnerInformation->Caption = "< Punkt dla gracza lewego";
         scoreLeftPaddle++;
@@ -266,14 +278,9 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
 
 void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
 {
-    if (firstGame == true)
-    {
-        firstGame = false;
-    }
-    else if (firstGame == false && (Application->MessageBox("Czy na pewno chcesz zaczaæ od nowa?", "PotwierdŸ", MB_YESNO | MB_ICONQUESTION) == IDNO))
-    {
-        return;
-    }
+    if (firstGame == true) firstGame = false;
+    else if (firstGame == false && (Application->MessageBox("Czy na pewno chcesz zaczaæ od nowa?", "PotwierdŸ", MB_YESNO | MB_ICONQUESTION) == IDNO)) return;
+
     NextRoundClick(NextRound);
     scoreLeftPaddle = 0;
     scoreRightPaddle = 0;
