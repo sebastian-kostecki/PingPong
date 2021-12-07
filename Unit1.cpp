@@ -129,6 +129,7 @@ void disableBall(TImage *Ball, TTimer *MovingBall)
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
+    ShowMessage("Witaj w grze PingPong.\n\nLewy gracz steruje wciskaj¹c klawisze W oraz S.\nPrawy gracz steruje wciskaj¹c strza³ki w górê i w dó³.\n\nInformacje dla graczy:\nOdbicie w srodku paletki przyspieszy pi³kê.\nMo¿esz dowolnie zmieniaæ pole gry.\n\nDobrej zabawy!");
 }
 //---------------------------------------------------------------------------
 
@@ -263,4 +264,5 @@ void __fastcall TForm1::NextRoundClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
 
