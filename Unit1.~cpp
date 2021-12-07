@@ -147,14 +147,17 @@ void disableBall(TImage *Ball, TTimer *MovingBall)
 
 void resetTranslations()
 {
-    if (translationUp > 0) translationUp = 5;
-    else translationUp = translationUp = -5;
+    const int BASE_TRANSLATION_UP = 5;
+    const int BASE_TRANSLATION_LEFT = 8;
 
-    if (translationLeft > 0) translationLeft = 8;
-    else translationLeft = translationLeft = -8;
+    if (translationUp > 0) translationUp = BASE_TRANSLATION_UP;
+    else translationUp = translationUp = -BASE_TRANSLATION_UP;
 
-    if (baseTranslationLeft > 0) baseTranslationLeft = 8;
-    else baseTranslationLeft = -8;
+    if (translationLeft > 0) translationLeft = BASE_TRANSLATION_LEFT;
+    else translationLeft = translationLeft = -BASE_TRANSLATION_LEFT;
+
+    if (baseTranslationLeft > 0) baseTranslationLeft = BASE_TRANSLATION_LEFT;
+    else baseTranslationLeft = -BASE_TRANSLATION_LEFT;
 }
 
 //---------------------------------------------------------------------------
