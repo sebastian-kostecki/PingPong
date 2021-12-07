@@ -59,18 +59,21 @@ bool isTranslationOverNormal()
 
 void speedBallUpIfBounceMiddlePaddle(TImage *Ball, TImage *Paddle)
 {
-    if (isBounceInMiddleOfPaddle(Ball, Paddle) && isTranslationOverNormal()) {}
-
-    else if (isBounceInMiddleOfPaddle(Ball, Paddle))
-        {
-            translationUp *= 2;
-            translationLeft *= 2;
-        }
-    else if (isTranslationOverNormal())
-        {
-            translationUp /= 2;
-            translationLeft /= 2;
-        }
+    if (isBounceInMiddleOfPaddle(Ball, Paddle) && isTranslationOverNormal())
+    {
+        translationUp = translationUp;
+        translationLeft = translationLeft;
+    }
+    else if (isBounceInMiddleOfPaddle(Ball, Paddle) && !(isTranslationOverNormal()))
+    {
+        translationUp *= 2;
+        translationLeft *= 2;
+    }
+    else if (!(isBounceInMiddleOfPaddle(Ball, Paddle)) && isTranslationOverNormal())
+    {
+        translationUp /= 2;
+        translationLeft /= 2;
+    }
 }
 
 void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
