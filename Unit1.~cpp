@@ -11,16 +11,11 @@ TForm1 *Form1;
 
 int translationUp = -5;
 int translationLeft = -8;
-
 int baseTranslationLeft = -8;
 
 int scoreLeftPaddle = 0;
 int scoreRightPaddle = 0;
-AnsiString scoreLeftPlayer = "";
-AnsiString scoreRightPlayer = "";
-
 int numberOfBounces = 0;
-AnsiString bounces = "";
 
 bool firstGame = true;
 
@@ -117,22 +112,35 @@ void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
         }
 }
 
+bool isRightPlayerWinner(TImage *Ball, TImage *LeftPaddle)
+{
+    if (Ball->Left + Ball->Width < LeftPaddle->Left) return true;
+    else return false;
+}
+
+bool isLeftPlayerWinner(TImage *Ball, TImage *RightPaddle)
+{
+    if (Ball->Left > RightPaddle->Left + RightPaddle->Width) return true;
+    else return false;
+}
+
 void bounceBallByWalls(TImage *Ball)
 {
-    if (Ball->Top <= 5) translationUp = -translationUp;
-    if (Ball->Top + Ball->Height >= Form1->ClientHeight - 5) translationUp = -translationUp;
+    const int DISTANCE_FROM_WALL = 5;
+    if (Ball->Top <= DISTANCE_FROM_WALL) translationUp = -translationUp;
+    if (Ball->Top + Ball->Height >= Form1->ClientHeight - DISTANCE_FROM_WALL) translationUp = -translationUp;
 }
 
 void displayInformationsAfterWin(TLabel *WinnerInformation, TLabel *Score, TLabel *CounterBounces, TButton *NextRound, TButton *ButtonNewGame)
 {
     WinnerInformation->Visible = true;
     Score->Visible = true;
-    scoreLeftPlayer = IntToStr(scoreLeftPaddle);
-    scoreRightPlayer = IntToStr(scoreRightPaddle);
+    AnsiString scoreLeftPlayer = IntToStr(scoreLeftPaddle);
+    AnsiString scoreRightPlayer = IntToStr(scoreRightPaddle);
     Score->Caption = scoreLeftPlayer + " : " + scoreRightPlayer;
 
     CounterBounces->Visible = true;
-    bounces = IntToStr(numberOfBounces);
+    AnsiString bounces = IntToStr(numberOfBounces);
     CounterBounces->Caption = "Iloœæ odbiæ: " + bounces;
 
     NextRound->Visible = true;
@@ -214,20 +222,26 @@ void __fastcall TForm1::RightPaddleDownTimer(TObject *Sender)
 void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
+    const int VK_W = 87;
+    const int VK_S = 83;
+
     if (Key == VK_UP) RightPaddleUp->Enabled = true;
     if (Key == VK_DOWN) RightPaddleDown->Enabled = true;
-    if (Key == 87) LeftPaddleUp->Enabled = true;
-    if (Key == 83) LeftPaddleDown->Enabled = true;
+    if (Key == VK_W) LeftPaddleUp->Enabled = true;
+    if (Key == VK_S) LeftPaddleDown->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
+    const int VK_W = 87;
+    const int VK_S = 83;
+
     if (Key == VK_UP) RightPaddleUp->Enabled = false;
     if (Key == VK_DOWN) RightPaddleDown->Enabled = false;
-    if (Key == 87) LeftPaddleUp->Enabled = false;
-    if (Key == 83) LeftPaddleDown->Enabled = false;
+    if (Key == VK_W) LeftPaddleUp->Enabled = false;
+    if (Key == VK_S) LeftPaddleDown->Enabled = false;
 }
 //---------------------------------------------------------------------------
 
@@ -241,7 +255,7 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
     bounceBallByLeftPaddle(Ball, LeftPaddle);
     bounceBallByRightPaddle(Ball, RightPaddle);
 
-    if (Ball->Left + Ball->Width < LeftPaddle->Left)
+    if (isRightPlayerWinner(Ball, LeftPaddle))
     {
         WinnerInformation->Caption = "Punkt dla gracza prawego >";
         scoreRightPaddle++;
@@ -249,7 +263,7 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
         disableBall(Ball, MovingBall);
         displayInformationsAfterWin(WinnerInformation, Score, CounterBounces, NextRound, ButtonNewGame);
     }
-    else if (Ball->Left > RightPaddle->Left + RightPaddle->Width)
+    else if (isLeftPlayerWinner(Ball, RightPaddle))
     {
         WinnerInformation->Caption = "< Punkt dla gracza lewego";
         scoreLeftPaddle++;
@@ -264,14 +278,9 @@ void __fastcall TForm1::MovingBallTimer(TObject *Sender)
 
 void __fastcall TForm1::ButtonNewGameClick(TObject *Sender)
 {
-    if (firstGame == true)
-    {
-        firstGame = false;
-    }
-    else if (firstGame == false && (Application->MessageBox("Czy na pewno chcesz zaczaæ od nowa?", "PotwierdŸ", MB_YESNO | MB_ICONQUESTION) == IDNO))
-    {
-        return;
-    }
+    if (firstGame == true) firstGame = false;
+    else if (firstGame == false && (Application->MessageBox("Czy na pewno chcesz zaczaæ od nowa?", "PotwierdŸ", MB_YESNO | MB_ICONQUESTION) == IDNO)) return;
+
     NextRoundClick(NextRound);
     scoreLeftPaddle = 0;
     scoreRightPaddle = 0;
