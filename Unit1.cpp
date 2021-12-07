@@ -12,7 +12,7 @@ TForm1 *Form1;
 int translationUp = -5;
 int translationLeft = -8;
 
-int baseTranslationLeft = translationLeft;
+int baseTranslationLeft = -8;
 
 int scoreLeftPaddle = 0;
 int scoreRightPaddle = 0;
@@ -75,27 +75,45 @@ void speedBallUpIfBounceMiddlePaddle(TImage *Ball, TImage *Paddle)
     }
 }
 
+void speedUpBallWithTime()
+{
+    const int NUMBER_OF_BOUNCES_TO_SPEED_UP_BALL = 6;
+    if (numberOfBounces % NUMBER_OF_BOUNCES_TO_SPEED_UP_BALL == 5)
+    {
+        if (translationUp > 0) translationUp++;
+        else translationUp = translationUp--;
+
+        if (translationLeft > 0) translationLeft++;
+        else translationLeft = translationLeft--;
+
+        if (baseTranslationLeft > 0) baseTranslationLeft = baseTranslationLeft++;
+        else baseTranslationLeft = baseTranslationLeft--;
+    }
+}
+
 void bounceBallByRightPaddle(TImage *Ball, TImage *RightPaddle)
 {
     if ((Ball->Top + (Ball->Height / 2) > RightPaddle->Top) &&
         (Ball->Top + (Ball->Height / 2) < RightPaddle->Top + RightPaddle->Height) &&
-        (Ball->Left + Ball->Height == RightPaddle->Left))
+        (Ball->Left + Ball->Height > RightPaddle->Left))
         {
-            translationLeft = -translationLeft;
+            if (translationLeft > 0) translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, RightPaddle);
             numberOfBounces++;
+            speedUpBallWithTime();
         }
 }
 
 void bounceBallByLeftPaddle(TImage *Ball, TImage *LeftPaddle)
 {
     if ((Ball->Top + (Ball->Height / 2) > LeftPaddle->Top) &&
-        (Ball->Left == LeftPaddle->Left + LeftPaddle->Width) &&
+        (Ball->Left < LeftPaddle->Left + LeftPaddle->Width) &&
         (Ball->Top + (Ball->Height / 2) < LeftPaddle->Top + LeftPaddle->Height))
         {
-            translationLeft = -translationLeft;
+            if (translationLeft < 0) translationLeft = -translationLeft;
             speedBallUpIfBounceMiddlePaddle(Ball, LeftPaddle);
             numberOfBounces++;
+            speedUpBallWithTime();
         }
 }
 
@@ -266,5 +284,6 @@ void __fastcall TForm1::NextRoundClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
 
 
